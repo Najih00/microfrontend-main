@@ -1,0 +1,5 @@
+{
+    "app2": "https://<storage_account_name>.blob.core.windows.net/microfrontend-app2/index.html?<sas_token>",
+    "app3": "https://<storage_account_name>.blob.core.windows.net/microfrontend-app3/index.html?<sas_token>"
+  }
+  
