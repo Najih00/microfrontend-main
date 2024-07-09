@@ -25,6 +25,8 @@
                 const response = await fetch('/.auth/me');
                 if (response.ok) {
                     const userInfo = await response.json();
+                    console.log('User Info:', userInfo);  // Log the response for debugging
+
                     if (userInfo.length > 0) {
                         const user = userInfo[0];
                         document.getElementById('user-info').innerHTML = `
