@@ -17,9 +17,6 @@
     <div class="user-info" id="user-info">
         <!-- User information will be populated here -->
     </div>
-    <div id="groups-info" class="user-info">
-        <!-- User groups will be populated here -->
-    </div>
     <button id="logout-button" style="display: none;">Logout</button>
 
     <script>
@@ -27,20 +24,15 @@
             try {
                 const response = await fetch('/.auth/me');
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log('User Info:', data);  // Log the response for debugging
+                    const userInfo = await response.json();
+                    console.log('User Info:', userInfo);  // Log the response for debugging
 
-                    if (data.clientPrincipal) {
-                        const user = data.clientPrincipal;
+                    if (userInfo.length > 0) {
+                        const user = userInfo[0];
                         document.getElementById('user-info').innerHTML = `
-                            <p>Welcome, ${user.userDetails}</p>
-                            <p>User ID: ${user.userId}</p>
-                            <p>Roles: ${user.userRoles.join(', ')}</p>
+                            <p>Welcome, ${user.user_id}</p>
                         `;
                         document.getElementById('logout-button').style.display = 'block';
-
-                        // Call function to fetch and display user groups
-                        await fetchUserGroups(data.authenticationToken);
                     } else {
                         document.getElementById('user-info').innerHTML = `
                             <p>You are not logged in. <a href="/.auth/login/aad">Login</a></p>
@@ -59,44 +51,12 @@
             }
         }
 
-        async function fetchUserGroups(accessToken) {
-            try {
-                const response = await fetch('https://graph.microsoft.com/v1.0/me/memberOf', {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`, // Include access token in Authorization header
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('User Groups:', data.value);  // Log groups for debugging
-
-                    // Display groups in groups-info section
-                    const groupsList = data.value.map(group => group.displayName).join(', ');
-                    document.getElementById('groups-info').innerHTML = `
-                        <p>Groups: ${groupsList}</p>
-                    `;
-                } else {
-                    console.error('Failed to fetch user groups:', response.status);
-                    document.getElementById('groups-info').innerHTML = `
-                        <p>Failed to fetch user groups (${response.status}).</p>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error fetching user groups:', error);
-                document.getElementById('groups-info').innerHTML = `
-                    <p>Error fetching user groups.</p>
-                `;
-            }
-        }
-
-        // Function to handle logout
         document.getElementById('logout-button').addEventListener('click', () => {
             window.location.href = '/.auth/logout';
         });
 
-        // Call getUserInfo function when the page loads
         getUserInfo();
     </script>
+    <script src="app.js"></script>
 </body>
 </html>
