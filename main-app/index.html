@@ -15,48 +15,7 @@
     <div id="app2-container"></div>
     <div id="app3-container"></div>
     <div class="user-info" id="user-info">
-        <!-- User information will be populated here -->
-    </div>
-    <button id="logout-button" style="display: none;">Logout</button>
-
-    <script>
-        async function getUserInfo() {
-            try {
-                const response = await fetch('/.auth/me');
-                if (response.ok) {
-                    const userInfo = await response.json();
-                    console.log('User Info:', userInfo);  // Log the response for debugging
-
-                    if (userInfo.length > 0) {
-                        const user = userInfo[0];
-                        document.getElementById('user-info').innerHTML = `
-                            <p>Welcome, ${user.user_id}</p>
-                        `;
-                        document.getElementById('logout-button').style.display = 'block';
-                    } else {
-                        document.getElementById('user-info').innerHTML = `
-                            <p>You are not logged in. <a href="/.auth/login/aad">Login</a></p>
-                        `;
-                    }
-                } else {
-                    document.getElementById('user-info').innerHTML = `
-                        <p>Could not fetch user information.</p>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-                document.getElementById('user-info').innerHTML = `
-                    <p>Error fetching user information.</p>
-                `;
-            }
-        }
-
-        document.getElementById('logout-button').addEventListener('click', () => {
-            window.location.href = '/.auth/logout';
-        });
-
-        getUserInfo();
-    </script>
+   
     <script src="app.js"></script>
 </body>
 </html>
